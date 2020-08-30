@@ -1,200 +1,38 @@
-<div class="container">
-  <!--
-  <div class="jumbotron text-center">
-    <h1>
-      <img class="logo" src="assets/ngx-rocket-logo.png" alt="angular logo" />
-      <span translate>Hello world !</span>
-    </h1>
-    <app-loader [isLoading]="isLoading"></app-loader>
-    <q [hidden]="isLoading">{{ quote }}</q>
+<div id="menu" class="overlay">
+  <a href="javascript:" class="closebtn" (click)="closeNav()">
+    <i class="fas fa-times fa-2x"></i>
+  </a>
+
+  <!-- Overlay content -->
+  <div class="overlay-content">
+    <a href="javascript:" class="md">Title</a>
+    <a href="javascript:">About</a>
+    <a href="javascript:">Follow Us</a>
+    <a href="javascript:">Sign-in to add films</a>
   </div>
-  -->
+</div>
 
-  <div class="row form-group my-4">
-    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xm-12">
-      <div class="card">
-        <div class="card-body">
-          <button type="button" class="btn btn-primary btn-lg btn-block" (click)="showResult('YES')">
-            Found Result
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xm-12">
-      <div class="card">
-        <div class="card-body">
-          <button type="button" class="btn btn-secondary btn-lg btn-block" (click)="showResult('NO')">No Result</button>
-        </div>
-      </div>
-    </div>
+<div class="topnav">
+  <a href="javascript:"><i class="fab fa-adobe fa-2x"></i></a>
+  <div class="topnav-right">
+    <a href="javascript:" (click)="openNav()"><i class="fas fa-bars fa-2x"></i></a>
   </div>
+</div>
 
-  <!--  <div class="center">-->
-  <!--    <app-loader [isLoading]="isLoading"></app-loader>-->
-  <!--  </div>-->
-
-  <div *ngIf="isResult === 'NO'" class="jumbotron text-center bg-white border my-4">
-    <div [hidden]="isLoading">
-      <h1 class="animate__animated animate__zoomIn">
-        <img class="logo" src="assets/no-results.png" alt="not found" />
-      </h1>
-      <p class="text-muted lead" class="animate__animated animate__fadeIn">No Result Found</p>
-    </div>
-  </div>
-
-  <div *ngIf="isResult === 'YES'">
-    <div class="row form-group my-4">
-      <div class="col">
-        <div class="card">
-          <div class="card-body">
-            <div class="font-weight-bold mb-2">Location Address</div>
-            <div>{{ items.street_line_1 || '' }}</div>
-            <div>{{ items.street_line_2 || '' }}</div>
-            <div>{{ items.city }}, {{ items.state_code }}, {{ items.country_code }}, {{ items.postal_code }}</div>
-            <div>{{ items.country_code }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row form-group my-4">
-      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xm-12 mb-4">
-        <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-sm-4 font-weight-bold">Current Residents :</div>
-              <div class="col-sm-8">2</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xm-12">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26360792.06323007!2d-113.74648470908026!3d36.24264877508244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited%20States!5e0!3m2!1sen!2s!4v1589818007177!5m2!1sen!2s"
-          width="100%"
-          height="450"
-          frameborder="0"
-          style="border: 0;"
-          allowfullscreen=""
-          aria-hidden="false"
-          tabindex="0"
-        ></iframe>
-      </div>
-    </div>
-
-    <div class="row form-group my-4">
-      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xm-12">
-        <div class="mx-auto" style="overflow-x: scroll; width: 800px; padding: 0 15px 0 0;">
-          <ngb-accordion #parentAccordion="ngbAccordion" activeIds="parent-acc-0">
-            <ngb-panel *ngFor="let item of items.current_residents; index as i" id="parent-acc-{{ i }}">
-              <ng-template ngbPanelHeader let-opened="opened">
-                <div
-                  class="d-flex align-items-center justify-content-between font-weight-bold animate__animated animate__fadeIn"
-                >
-                  <div>
-                    <i class="fas mr-4" [ngClass]="{ 'fa-arrow-down': opened, 'fa-arrow-right': !opened }"></i>
-                    <span>{{ item.name }}</span>
-                  </div>
-                  <div>
-                    Age range: <span>{{ item.age_range || '-' }}</span>
-                  </div>
-                  <div>
-                    Address link date: <span>{{ item.link_to_address_start_date }}</span>
-                  </div>
-                  <button ngbPanelToggle class="btn btn-link p-0">Show</button>
-                </div>
-              </ng-template>
-              <ng-template ngbPanelContent>
-                <div
-                  class="d-flex align-items-center justify-content-between form-group animate__animated animate__fadeIn"
-                >
-                  <div>{{ item.alternate_names.join(', ') || 'No names present' }}</div>
-                  <div *ngIf="item.type !== 'Business'">
-                    {{ getPhones(item.phones).join(', ') || 'No number present' }}
-                  </div>
-                  <div *ngIf="item.type === 'Business'">
-                    {{ item.link_to_address_start_date || 'No date present' }}
-                  </div>
-                </div>
-
-                <ngb-accordion #childAccordion="ngbAccordion" activeIds="">
-                  <ngb-panel id="child-acc-0" *ngIf="item.type !== 'Business'">
-                    <ng-template ngbPanelHeader let-opened="opened">
-                      <div
-                        class="d-flex align-items-center justify-content-between font-weight-bold animate__animated animate__fadeIn"
-                      >
-                        <div>
-                          <i class="fas mr-4" [ngClass]="{ 'fa-arrow-down': opened, 'fa-arrow-right': !opened }"></i>
-                          <span>Historical Address : {{ item.historical_addresses.length }}</span>
-                        </div>
-                        <button ngbPanelToggle class="btn btn-link p-0">View</button>
-                      </div>
-                    </ng-template>
-                    <ng-template ngbPanelContent>
-                      <div class="row">
-                        <div class="col font-weight-bold">Address</div>
-                        <div class="col font-weight-bold text-right">Location</div>
-                      </div>
-                      <div class="row" *ngFor="let address of item.historical_addresses">
-                        <div class="col">{{ address.street_line_1 }}, {{ address.street_line_2 }}</div>
-                        <div class="col text-right">{{ address.city }} - {{ address.country_code }}</div>
-                      </div>
-                    </ng-template>
-                  </ngb-panel>
-
-                  <ngb-panel id="child-acc-1" *ngIf="item.type !== 'Business'">
-                    <ng-template ngbPanelHeader let-opened="opened">
-                      <div
-                        class="d-flex align-items-center justify-content-between font-weight-bold animate__animated animate__fadeIn"
-                      >
-                        <div>
-                          <i class="fas mr-4" [ngClass]="{ 'fa-arrow-down': opened, 'fa-arrow-right': !opened }"></i>
-                          <span>Associate Persons : {{ item.associated_people.length }}</span>
-                        </div>
-                        <button ngbPanelToggle class="btn btn-link p-0">View</button>
-                      </div>
-                    </ng-template>
-                    <ng-template ngbPanelContent>
-                      <div class="row">
-                        <div class="col font-weight-bold">Full Name</div>
-                        <div class="col font-weight-bold">First Name</div>
-                        <div class="col font-weight-bold">Middle Name</div>
-                        <div class="col font-weight-bold text-right">Last Name</div>
-                      </div>
-                      <div class="row" *ngFor="let person of item.associated_people">
-                        <div class="col">{{ person.name }}</div>
-                        <div class="col">{{ person.firstname }}</div>
-                        <div class="col">{{ person.middlename }}</div>
-                        <div class="col text-right">{{ person.lastname }}</div>
-                      </div>
-                    </ng-template>
-                  </ngb-panel>
-
-                  <ngb-panel id="child-acc-1" *ngIf="item.type === 'Business'">
-                    <ng-template ngbPanelHeader let-opened="opened">
-                      <div
-                        class="d-flex align-items-center justify-content-between font-weight-bold animate__animated animate__fadeIn"
-                      >
-                        <div>
-                          <i class="fas mr-4" [ngClass]="{ 'fa-arrow-down': opened, 'fa-arrow-right': !opened }"></i>
-                          <span>Business : {{ item.industry.length }}</span>
-                        </div>
-                        <button ngbPanelToggle class="btn btn-link p-0">View</button>
-                      </div>
-                    </ng-template>
-                    <ng-template ngbPanelContent>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <div>{{ item.industry.join(', ') || 'No business present' }}</div>
-                        <div>{{ getPhones(item.phones).join(', ') || 'No number present' }}</div>
-                      </div>
-                    </ng-template>
-                  </ngb-panel>
-                </ngb-accordion>
-              </ng-template>
-            </ngb-panel>
-          </ngb-accordion>
-        </div>
-      </div>
-    </div>
+<!-- Swiper -->
+<div class="swiper-slide">I Feel Like</div>
+<div class="slide-overlay"></div>
+<div class="swiper-container">
+  <div class="swiper-wrapper grabbable">
+    <div class="swiper-slide">Option 1</div>
+    <div class="swiper-slide">Option 2</div>
+    <div class="swiper-slide">Option 3</div>
+    <div class="swiper-slide">Option 4</div>
+    <div class="swiper-slide">Option 5</div>
+    <div class="swiper-slide">Option 6</div>
+    <div class="swiper-slide">Option 7</div>
+    <div class="swiper-slide">Option 8</div>
+    <div class="swiper-slide">Option 9</div>
+    <div class="swiper-slide">Option 10</div>
   </div>
 </div>

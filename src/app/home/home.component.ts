@@ -1,12 +1,11 @@
-import { Component, AfterViewInit } from '@angular/core';
-import axios from 'axios';
+import { AfterViewInit, Component } from '@angular/core';
 
-declare var Swiper:any;
+declare var Swiper: any;
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements AfterViewInit {
   isLoading = false;
@@ -30,7 +29,16 @@ export class HomeComponent implements AfterViewInit {
       mousewheel: {
         releaseOnEdges: true
       },
-      freeModeSticky: true
+      freeModeSticky: true,
+      on: {
+        click() {
+          const current = this;
+          const isActive = current.clickedSlide.className.includes('swiper-slide-active');
+          if (isActive) {
+            console.log('isActive ', isActive);
+          }
+        }
+      }
     });
   }
 
